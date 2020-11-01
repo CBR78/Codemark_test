@@ -1,0 +1,16 @@
+package ru.codemark.test.validation;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class ContainDigitValidator implements ConstraintValidator<ContainDigit, String> {
+
+    @Override
+    public boolean isValid(String password, ConstraintValidatorContext context) {
+        if (password == null) {
+            return true;
+        }
+
+        return password.matches(".*\\d.*");
+    }
+}
