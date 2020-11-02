@@ -8,11 +8,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.codemark.test.validation.ContainDigit;
 import ru.codemark.test.validation.ContrainUpperCaseChar;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "USER")
 public class User {

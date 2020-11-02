@@ -11,9 +11,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ROLE")
 public class Role {
@@ -25,9 +29,6 @@ public class Role {
     private String name;
 
     @ManyToMany
-    @JoinTable(
-            name = "ROLE_USERS",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "login"))
+    @JoinTable(name = "ROLE_USERS", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "login"))
     private List<User> users;
 }
