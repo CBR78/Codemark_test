@@ -1,4 +1,4 @@
-package ru.codemark.test.service.impl;
+package ru.codemark.test.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,31 +11,27 @@ import org.springframework.stereotype.Service;
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
 import ru.codemark.test.repository.UserRepository;
-import ru.codemark.test.service.BaseService;
 
 @Service
-public class UserServiceImpl implements BaseService<User> {
+public class UserService {
 
     private UserRepository userRepository;
     private EntityManager entityManager;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, EntityManager entityManager) {
+    public UserService(UserRepository userRepository, EntityManager entityManager) {
         this.userRepository = userRepository;
         this.entityManager = entityManager;
     }
 
-    @Override
     public User create(User user) {
         return userRepository.save(user);
     }
 
-    @Override
     public User update(User user) {
         return userRepository.save(user);
     }
 
-    @Override
     public void delete(User user) {
         userRepository.delete(user);
     }

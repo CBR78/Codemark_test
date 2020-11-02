@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
-import ru.codemark.test.service.impl.UserServiceImpl;
+import ru.codemark.test.service.UserService;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
     private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
     private HttpHeaders headers = new HttpHeaders();
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

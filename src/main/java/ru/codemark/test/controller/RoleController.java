@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ru.codemark.test.model.Role;
-import ru.codemark.test.service.impl.RoleServiceImpl;
+import ru.codemark.test.service.RoleService;
 
 @RestController
 @RequestMapping("role")
 public class RoleController {
     private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
     private HttpHeaders headers = new HttpHeaders();
-    private RoleServiceImpl roleService;
+    private RoleService roleService;
 
     @Autowired
-    public RoleController(RoleServiceImpl roleService) {
+    public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }
 

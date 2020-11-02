@@ -1,4 +1,4 @@
-package ru.codemark.test.service.impl;
+package ru.codemark.test.service;
 
 import java.util.List;
 
@@ -9,31 +9,27 @@ import org.springframework.stereotype.Service;
 
 import ru.codemark.test.model.Role;
 import ru.codemark.test.repository.RoleRepository;
-import ru.codemark.test.service.BaseService;
 
 @Service
-public class RoleServiceImpl implements BaseService<Role> {
+public class RoleService {
 
     private RoleRepository roleRepository;
     private EntityManager entityManager;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, EntityManager entityManager) {
+    public RoleService(RoleRepository roleRepository, EntityManager entityManager) {
         this.roleRepository = roleRepository;
         this.entityManager = entityManager;
     }
 
-    @Override
     public Role create(Role role) {
         return roleRepository.save(role);
     }
 
-    @Override
     public Role update(Role role) {
         return roleRepository.save(role);
     }
 
-    @Override
     public void delete(Role role) {
         roleRepository.delete(role);
     }
