@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
@@ -47,6 +48,16 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
         Map<String, Object> body = createBody(status, errors);
         HttpHeaders headers = new HttpHeaders();
         headers.add(CUSTOM_HEADER_NAME, "@Validated error. More details in the response body.");
+        return handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> resourceNotFoundException(NoSuchElementException ex, WebRequest request) {
+
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        Map<String, Object> body = createBody(status, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(CUSTOM_HEADER_NAME, "Database entry not found");
         return handleExceptionInternal(ex, body, headers, status, request);
     }
 

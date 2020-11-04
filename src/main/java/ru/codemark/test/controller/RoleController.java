@@ -38,6 +38,14 @@ public class RoleController {
         return new ResponseEntity<>(roles, headers, HttpStatus.OK);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Role> getById(@PathVariable Long id) {
+        Role role = roleService.getById(id);
+        headers.clear();
+        headers.add(CUSTOM_HEADER_NAME, "Role by id " + role.getId() + " found.");
+        return new ResponseEntity<>(role, headers, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Role> add(@RequestBody Role role) {
         Role createdRole = roleService.create(role);
