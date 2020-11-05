@@ -100,7 +100,9 @@ class CodemarkApplicationTests {
         ResponseEntity<Role> responseEntity = restTemplate.exchange(getRoleUrl(), HttpMethod.PUT,
                 new HttpEntity<Role>(requestObject), Role.class);
 
-        assertEquals(requestObject, responseEntity.getBody());
+        Role targetRole = requestObject;
+        
+        assertEquals(targetRole, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
 
@@ -109,6 +111,7 @@ class CodemarkApplicationTests {
     void testDeleteRole() {
         String urlRoleAndId = getRoleUrl() + "/1";
         Role role = restTemplate.getForObject(urlRoleAndId, Role.class);
+        
         assertNotNull(role);
 
         restTemplate.delete(urlRoleAndId);
@@ -134,6 +137,7 @@ class CodemarkApplicationTests {
         roles.clear();
         roles.add(targetRoleUser);
         User targetUser = new User("john", "sdH4k", "John Smith", roles);
+        
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(201, responseEntity.getStatusCodeValue());
 
@@ -142,7 +146,7 @@ class CodemarkApplicationTests {
         roles.add(new Role(2L, null, null));
         roles.add(new Role(3L, null, null));
         requestObject = new User("maria", "sdF5l", "Maria Smith", roles);
-        responseEntity = restTemplate.postForEntity(getUserUrl(), requestObject, User.class);
+        restTemplate.postForEntity(getUserUrl(), requestObject, User.class);
     }
 
     @Test
@@ -154,6 +158,7 @@ class CodemarkApplicationTests {
         List<UserDtoForGetAll> targetUserList = new ArrayList<>();
         targetUserList.add(new UserDtoForGetAll("john", "sdH4k", "John Smith"));
         targetUserList.add(new UserDtoForGetAll("maria", "sdF5l", "Maria Smith"));
+        
         assertEquals(targetUserList, Arrays.asList(responseEntity.getBody()));
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -168,6 +173,7 @@ class CodemarkApplicationTests {
         roles.add(targetRoleUser);
         roles.add(targetRoleAdmin);
         User targetUser = new User("maria", "sdF5l", "Maria Smith", roles);
+        
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -187,6 +193,7 @@ class CodemarkApplicationTests {
         targetRoles.add(targetRoleAdmin);
         targetRoles.add(targetRoleAnalyst);
         User targetUser = new User("john", "sdH4k + test", "John Smith + test", targetRoles);
+        
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -196,6 +203,7 @@ class CodemarkApplicationTests {
     void testDeleteUser() {
         String urlUserAndLogin = getUserUrl() + "/maria";
         User user = restTemplate.getForObject(urlUserAndLogin, User.class);
+        
         assertNotNull(user);
 
         restTemplate.delete(urlUserAndLogin);
