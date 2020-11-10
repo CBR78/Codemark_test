@@ -34,6 +34,7 @@ class CodemarkApplicationTests {
     private int port;
     @Autowired
     private TestRestTemplate restTemplate;
+
     private List<User> emptyUserList = Collections.emptyList();
 
     private Role targetRoleForTestPut = new Role(1L, "forTestPut", emptyUserList);
@@ -41,11 +42,11 @@ class CodemarkApplicationTests {
     private Role targetRoleAdmin = new Role(3L, "admin", emptyUserList);
     private Role targetRoleAnalyst = new Role(4L, "analyst", emptyUserList);
 
-    private String getRoleUrl() {
+    private String getUrlRole() {
         return "http://localhost:" + port + "/role";
     }
 
-    private String getUserUrl() {
+    private String getUrlUser() {
         return "http://localhost:" + port + "/user";
     }
 
@@ -55,22 +56,22 @@ class CodemarkApplicationTests {
     @Order(1)
     void testAddRoles() {
         // Add Role "forTestPut"
-        ResponseEntity<Role> responseEntity = restTemplate.postForEntity(getRoleUrl(),
+        ResponseEntity<Role> responseEntity = restTemplate.postForEntity(getUrlRole(),
                 new Role(null, "forTestPut", null), Role.class);
 
         assertEquals(new Role(1L, "forTestPut", null), responseEntity.getBody());
         assertEquals(201, responseEntity.getStatusCodeValue());
 
         // Adding Roles for the next tests
-        restTemplate.postForEntity(getRoleUrl(), new Role(null, "user", null), Role.class);
-        restTemplate.postForEntity(getRoleUrl(), new Role(null, "admin", null), Role.class);
-        restTemplate.postForEntity(getRoleUrl(), new Role(null, "analyst", null), Role.class);
+        restTemplate.postForEntity(getUrlRole(), new Role(null, "user", null), Role.class);
+        restTemplate.postForEntity(getUrlRole(), new Role(null, "admin", null), Role.class);
+        restTemplate.postForEntity(getUrlRole(), new Role(null, "analyst", null), Role.class);
     }
 
     @Test
     @Order(2)
     void testGetAllRoles() {
-        ResponseEntity<Role[]> responseEntity = restTemplate.getForEntity(getRoleUrl(), Role[].class);
+        ResponseEntity<Role[]> responseEntity = restTemplate.getForEntity(getUrlRole(), Role[].class);
 
         List<Role> targetRoleList = new ArrayList<>();
         targetRoleList.add(targetRoleForTestPut);
@@ -85,7 +86,7 @@ class CodemarkApplicationTests {
     @Test
     @Order(3)
     void testGetRoleById() {
-        String urlRoleAndId = getRoleUrl() + "/2";
+        String urlRoleAndId = getUrlRole() + "/2";
         ResponseEntity<Role> responseEntity = restTemplate.getForEntity(urlRoleAndId, Role.class);
 
         assertEquals(targetRoleUser, responseEntity.getBody());
@@ -97,11 +98,11 @@ class CodemarkApplicationTests {
     void testPutRole() {
         // Put Role "forTestPut". Rename to "forTestPut+++"
         Role requestObject = new Role(1L, "forTestPut+++", null);
-        ResponseEntity<Role> responseEntity = restTemplate.exchange(getRoleUrl(), HttpMethod.PUT,
+        ResponseEntity<Role> responseEntity = restTemplate.exchange(getUrlRole(), HttpMethod.PUT,
                 new HttpEntity<Role>(requestObject), Role.class);
 
         Role targetRole = requestObject;
-        
+
         assertEquals(targetRole, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -109,9 +110,9 @@ class CodemarkApplicationTests {
     @Test
     @Order(5)
     void testDeleteRole() {
-        String urlRoleAndId = getRoleUrl() + "/1";
+        String urlRoleAndId = getUrlRole() + "/1";
         Role role = restTemplate.getForObject(urlRoleAndId, Role.class);
-        
+
         assertNotNull(role);
 
         restTemplate.delete(urlRoleAndId);
@@ -131,13 +132,13 @@ class CodemarkApplicationTests {
         List<Role> roles = new ArrayList<>();
         roles.add(new Role(2L, null, null));
         User requestObject = new User("john", "sdH4k", "John Smith", roles);
-        ResponseEntity<User> responseEntity = restTemplate.postForEntity(getUserUrl(), requestObject,
+        ResponseEntity<User> responseEntity = restTemplate.postForEntity(getUrlUser(), requestObject,
                 User.class);
 
         roles.clear();
         roles.add(targetRoleUser);
         User targetUser = new User("john", "sdH4k", "John Smith", roles);
-        
+
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(201, responseEntity.getStatusCodeValue());
 
@@ -146,19 +147,19 @@ class CodemarkApplicationTests {
         roles.add(new Role(2L, null, null));
         roles.add(new Role(3L, null, null));
         requestObject = new User("maria", "sdF5l", "Maria Smith", roles);
-        restTemplate.postForEntity(getUserUrl(), requestObject, User.class);
+        restTemplate.postForEntity(getUrlUser(), requestObject, User.class);
     }
 
     @Test
     @Order(7)
     void testGetAllUsers() {
-        ResponseEntity<UserDtoForGetAll[]> responseEntity = restTemplate.getForEntity(getUserUrl(),
+        ResponseEntity<UserDtoForGetAll[]> responseEntity = restTemplate.getForEntity(getUrlUser(),
                 UserDtoForGetAll[].class);
 
         List<UserDtoForGetAll> targetUserList = new ArrayList<>();
         targetUserList.add(new UserDtoForGetAll("john", "sdH4k", "John Smith"));
         targetUserList.add(new UserDtoForGetAll("maria", "sdF5l", "Maria Smith"));
-        
+
         assertEquals(targetUserList, Arrays.asList(responseEntity.getBody()));
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -166,14 +167,14 @@ class CodemarkApplicationTests {
     @Test
     @Order(8)
     void testGetUserByLogin() {
-        String urlUserAndLogin = getUserUrl() + "/maria";
+        String urlUserAndLogin = getUrlUser() + "/maria";
         ResponseEntity<User> responseEntity = restTemplate.getForEntity(urlUserAndLogin, User.class);
 
         List<Role> roles = new ArrayList<>();
         roles.add(targetRoleUser);
         roles.add(targetRoleAdmin);
         User targetUser = new User("maria", "sdF5l", "Maria Smith", roles);
-        
+
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -186,14 +187,14 @@ class CodemarkApplicationTests {
         roles.add(new Role(3L, null, null));
         roles.add(new Role(4L, null, null));
         User requestObject = new User("john", "sdH4k + test", "John Smith + test", roles);
-        ResponseEntity<User> responseEntity = restTemplate.exchange(getUserUrl(), HttpMethod.PUT,
+        ResponseEntity<User> responseEntity = restTemplate.exchange(getUrlUser(), HttpMethod.PUT,
                 new HttpEntity<User>(requestObject), User.class);
 
         List<Role> targetRoles = new ArrayList<>();
         targetRoles.add(targetRoleAdmin);
         targetRoles.add(targetRoleAnalyst);
         User targetUser = new User("john", "sdH4k + test", "John Smith + test", targetRoles);
-        
+
         assertEquals(targetUser, responseEntity.getBody());
         assertEquals(200, responseEntity.getStatusCodeValue());
     }
@@ -201,9 +202,9 @@ class CodemarkApplicationTests {
     @Test
     @Order(10)
     void testDeleteUser() {
-        String urlUserAndLogin = getUserUrl() + "/maria";
+        String urlUserAndLogin = getUrlUser() + "/maria";
         User user = restTemplate.getForObject(urlUserAndLogin, User.class);
-        
+
         assertNotNull(user);
 
         restTemplate.delete(urlUserAndLogin);
@@ -227,7 +228,7 @@ class CodemarkApplicationTests {
         ResponseEntity<String> responseEntity;
 
         try {
-            responseEntity = restTemplate.postForEntity(getUserUrl(), userHasNoParameters, String.class);
+            responseEntity = restTemplate.postForEntity(getUrlUser(), userHasNoParameters, String.class);
         } catch (final HttpClientErrorException e) {
             assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
         }
