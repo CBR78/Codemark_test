@@ -1,22 +1,20 @@
 package ru.codemark.test.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
 import ru.codemark.test.repository.UserRepository;
 
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final EntityManager entityManager;
 
     @Autowired
     public UserService(UserRepository userRepository, EntityManager entityManager) {

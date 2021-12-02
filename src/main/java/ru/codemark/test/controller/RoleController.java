@@ -1,7 +1,5 @@
 package ru.codemark.test.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,16 +12,17 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.codemark.test.model.Role;
 import ru.codemark.test.service.RoleService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("role")
 public class RoleController {
     private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
-    private HttpHeaders headers = new HttpHeaders();
-    private RoleService roleService;
+    private final HttpHeaders headers = new HttpHeaders();
+    private final RoleService roleService;
 
     @Autowired
     public RoleController(RoleService roleService) {

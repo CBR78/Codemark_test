@@ -1,13 +1,5 @@
 package ru.codemark.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -22,10 +14,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
-
 import ru.codemark.test.model.Role;
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = CodemarkApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
@@ -35,12 +34,12 @@ class CodemarkApplicationTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private List<User> emptyUserList = Collections.emptyList();
+    private final List<User> emptyUserList = Collections.emptyList();
 
-    private Role targetRoleForTestPut = new Role(1L, "forTestPut", emptyUserList);
-    private Role targetRoleUser = new Role(2L, "user", emptyUserList);
-    private Role targetRoleAdmin = new Role(3L, "admin", emptyUserList);
-    private Role targetRoleAnalyst = new Role(4L, "analyst", emptyUserList);
+    private final Role targetRoleForTestPut = new Role(1L, "forTestPut", emptyUserList);
+    private final Role targetRoleUser = new Role(2L, "user", emptyUserList);
+    private final Role targetRoleAdmin = new Role(3L, "admin", emptyUserList);
+    private final Role targetRoleAnalyst = new Role(4L, "analyst", emptyUserList);
 
     private String getUrlRole() {
         return "http://localhost:" + port + "/role";
@@ -99,7 +98,7 @@ class CodemarkApplicationTests {
         // Put Role "forTestPut". Rename to "forTestPut+++"
         Role requestObject = new Role(1L, "forTestPut+++", null);
         ResponseEntity<Role> responseEntity = restTemplate.exchange(getUrlRole(), HttpMethod.PUT,
-                new HttpEntity<Role>(requestObject), Role.class);
+                new HttpEntity<>(requestObject), Role.class);
 
         Role targetRole = requestObject;
 
@@ -188,7 +187,7 @@ class CodemarkApplicationTests {
         roles.add(new Role(4L, null, null));
         User requestObject = new User("john", "sdH4k + test", "John Smith + test", roles);
         ResponseEntity<User> responseEntity = restTemplate.exchange(getUrlUser(), HttpMethod.PUT,
-                new HttpEntity<User>(requestObject), User.class);
+                new HttpEntity<>(requestObject), User.class);
 
         List<Role> targetRoles = new ArrayList<>();
         targetRoles.add(targetRoleAdmin);

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class RestResponseExceptionHandler extends ResponseEntityExceptionHandler
             HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(x -> x.getDefaultMessage()).collect(Collectors.toList());
+                .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
 
         Map<String, Object> body = createBody(status, errors);
         headers.add(CUSTOM_HEADER_NAME, "@Valid error. More details in the response body.");

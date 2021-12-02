@@ -1,7 +1,5 @@
 package ru.codemark.test.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,17 +13,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
 import ru.codemark.test.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
     private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
-    private HttpHeaders headers = new HttpHeaders();
-    private UserService userService;
+    private final HttpHeaders headers = new HttpHeaders();
+    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {

@@ -1,20 +1,18 @@
 package ru.codemark.test.service;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ru.codemark.test.model.Role;
 import ru.codemark.test.repository.RoleRepository;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @Service
 public class RoleService {
 
-    private RoleRepository roleRepository;
-    private EntityManager entityManager;
+    private final RoleRepository roleRepository;
+    private final EntityManager entityManager;
 
     @Autowired
     public RoleService(RoleRepository roleRepository, EntityManager entityManager) {
