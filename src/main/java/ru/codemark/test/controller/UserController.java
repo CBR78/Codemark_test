@@ -1,9 +1,7 @@
 package ru.codemark.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.codemark.test.model.User;
 import ru.codemark.test.model.dto.UserDtoForGetAll;
@@ -22,8 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping("user")
 public class UserController {
-    private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
-    private final HttpHeaders headers = new HttpHeaders();
     private final UserService userService;
 
     @Autowired
@@ -32,42 +29,28 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDtoForGetAll>> getAll() {
-        List<UserDtoForGetAll> users = userService.getAll();
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "All objects User found. Number of objects " + users.size());
-        return new ResponseEntity<>(users, headers, HttpStatus.OK);
+    public List<UserDtoForGetAll> getAll() {
+        return userService.getAll();
     }
 
     @GetMapping("{login}")
-    public ResponseEntity<User> getById(@PathVariable String login) {
-        User user = userService.getById(login);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "User by login " + user.getLogin() + " found.");
-        return new ResponseEntity<>(user, headers, HttpStatus.OK);
+    public User getById(@PathVariable String login) {
+        return userService.getById(login);
     }
 
     @PostMapping
-    public ResponseEntity<User> add(@Validated @RequestBody User user) {
-        User createdUser = userService.create(user);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Created User object with id " + createdUser.getLogin());
-        return new ResponseEntity<>(createdUser, headers, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public User add(@Validated @RequestBody User user) {
+        return userService.create(user);
     }
 
     @PutMapping
-    public ResponseEntity<User> update(@Validated @RequestBody User user) {
-        User updatedUser = userService.update(user);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Updated User object with id " + updatedUser.getLogin());
-        return new ResponseEntity<>(updatedUser, headers, HttpStatus.OK);
+    public User update(@Validated @RequestBody User user) {
+        return userService.update(user);
     }
 
     @DeleteMapping("{login}")
-    public ResponseEntity<User> delete(@PathVariable String login) {
+    public void delete(@PathVariable String login) {
         userService.delete(userService.getById(login));
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Deleted User object with id " + login);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 }

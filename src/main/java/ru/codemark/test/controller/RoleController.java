@@ -1,9 +1,7 @@
 package ru.codemark.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.codemark.test.model.Role;
 import ru.codemark.test.service.RoleService;
@@ -20,8 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("role")
 public class RoleController {
-    private static final String CUSTOM_HEADER_NAME = "X-Query-Result";
-    private final HttpHeaders headers = new HttpHeaders();
     private final RoleService roleService;
 
     @Autowired
@@ -30,42 +27,28 @@ public class RoleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Role>> getAll() {
-        List<Role> roles = roleService.getAll();
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "All objects Role found. Number of objects " + roles.size());
-        return new ResponseEntity<>(roles, headers, HttpStatus.OK);
+    public List<Role> getAll() {
+        return roleService.getAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Role> getById(@PathVariable Long id) {
-        Role role = roleService.getById(id);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Role by id " + role.getId() + " found.");
-        return new ResponseEntity<>(role, headers, HttpStatus.OK);
+    public Role getById(@PathVariable Long id) {
+        return roleService.getById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Role> add(@RequestBody Role role) {
-        Role createdRole = roleService.create(role);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Created Role object with id " + createdRole.getId());
-        return new ResponseEntity<>(createdRole, headers, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Role add(@RequestBody Role role) {
+        return roleService.create(role);
     }
 
     @PutMapping
-    public ResponseEntity<Role> update(@RequestBody Role role) {
-        Role updatedRole = roleService.update(role);
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Updated Role object with id " + updatedRole.getId());
-        return new ResponseEntity<>(updatedRole, headers, HttpStatus.OK);
+    public Role update(@RequestBody Role role) {
+        return roleService.update(role);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Role> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         roleService.delete(roleService.getById(id));
-        headers.clear();
-        headers.add(CUSTOM_HEADER_NAME, "Deleted Role object with id " + id);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 }
